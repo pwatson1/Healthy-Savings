@@ -1,8 +1,11 @@
 package com.healthlysavings.api.controller;
 
+import com.healthlysavings.api.HealthySavingsApplication;
 import com.healthlysavings.api.domain.*;
 import com.healthlysavings.api.repository.*;
 import com.google.gson.Gson;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -16,66 +19,34 @@ import java.sql.Date;
 @RestController
 public class BrainDataController {
 
-
     @Autowired
-    private BrainDataDAO brainDataDAO;
+    private BrainDataRepository brainDataRepository;
 
-    @RequestMapping("/get-brain-data")
+    @RequestMapping("/get-braindata")
     @ResponseBody
     public String getBrainData(){
 
-        String retStr = "";
-        Iterable<BrainData> brainDatas = brainDataDAO.findAll();
+        Iterable<BrainData> brainDatas = brainDataRepository.findAll();
         Gson gson = new Gson();
         return gson.toJson(brainDatas);
-
-        /*for(BrainData b : brainDatas){
-            retStr += b.toString();
-            retStr += System.lineSeparator();
-        }
-
-        return retStr;*/
     }
 
-    @RequestMapping("/get-brain-by-id")
+    @RequestMapping("/get-braindata-by-IdAndDate")
     @ResponseBody
-    public String getBrainDataByID(String userId){
+    public int getBrainDataByIDAndDate(String userId, Date date){
 
-        Gson gson = new Gson();
-        return gson.toJson(brainDataDAO.findByUserId(userId));
-        //return userId;
-    }
-
-    @RequestMapping("/get-brain-data-by-IdAndDate")
-    @ResponseBody
-    public int getBrainDataByIDandDate(String userId, Date date){
-
-        Gson gson = new Gson();
-        BrainData brainData = brainDataDAO.findByUserIdAndDate(userId,date);
+        BrainData brainData = brainDataRepository.findByUserIdAndDate(userId,date);
         return brainData.getScore();
     }
 
-    @RequestMapping("/get-brain-data-by-score")
-    @ResponseBody
-    public String getBrainDataByScore(int score){
-
-        Gson gson = new Gson();
-        return gson.toJson(brainDataDAO.findByScore(score));
-    }
-
-    @RequestMapping("/get-brain-data-by-date")
-    @ResponseBody
-    public String getBrainDataByDate(Date date){
-
-        Gson gson = new Gson();
-        return gson.toJson(brainDataDAO.findByDate(date));
-    }
-
-    @RequestMapping("/create-brain_data")
+    @RequestMapping("/create-braindata")
     @ResponseBody
     public void createBrainData(String userId, Date date, int score){
 
-        BrainData brainData = new BrainData(userId,date,score);
-        brainDataDAO.save(brainData);
+        try{BrainData brainData = new BrainData(userId,date,score);
+        brainDataRepository.save(brainData);} catch(Exception e){
+            Logger logger = LoggerFactory.getLogger(HealthySavingsApplication.class);
+            logger.error("Error creating new BrainData record. " + e.toString() + e.getCause());
+        }
     }
 }
