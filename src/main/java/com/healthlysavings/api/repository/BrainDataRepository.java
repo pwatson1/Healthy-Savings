@@ -12,7 +12,7 @@ import java.sql.Date;
  */
 
 @Transactional
-public interface BrainDataDAO extends CrudRepository<BrainData,String>{
+public interface BrainDataRepository extends CrudRepository<BrainData,String>{
 
     BrainData findByUserId(String userId);
     BrainData findByUserIdAndDate(String userId, Date date);
