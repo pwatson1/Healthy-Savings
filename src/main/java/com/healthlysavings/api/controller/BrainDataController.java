@@ -29,12 +29,12 @@ public class BrainDataController {
         Gson gson = new Gson();
         return gson.toJson(brainDatas);
 
-        /*for(BrainData b : brainDatas){
-            retStr += b.toString();
-            retStr += System.lineSeparator();
-        }
+            /*for(BrainData b : brainDatas){
+                retStr += b.toString();
+                retStr += System.lineSeparator();
+            }
 
-        return retStr;*/
+            return retStr;*/
     }
 
     @RequestMapping("/get-brain-by-id")
