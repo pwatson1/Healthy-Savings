@@ -6,12 +6,15 @@ package com.healthlysavings.api.controller;
  * Created by jrdavis on 3/14/16.
  */
 
+import com.healthlysavings.api.domain.CapitalOneCustomer;
 import com.healthlysavings.api.domain.User;
 import com.healthlysavings.api.repository.UserRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
@@ -38,12 +41,12 @@ public class UserController {
      * @param Firstname User's first name
      * @return A string describing if the user is succesfully created or not.
      */
-    @RequestMapping("/create")
+    @RequestMapping(value ="/user/create", method = RequestMethod.POST)
     @ResponseBody
-    public String create(String email, String Firstname, String userAddress, String userGender, Double userHeight, Double userWeight) {
-        User user = null;
+    public String create(@RequestBody CapitalOneCustomer capitalOneCustomer, String email, Double userHeight, Double userWeight, String ThirdPartyChoice, String userGender) {
+      User user;
         try {
-            user = new User(email, Firstname, userAddress, userGender, userHeight, userWeight);
+            user = new User(capitalOneCustomer, email, userHeight, userWeight, ThirdPartyChoice, userGender);
             userDao.save(user);
         }
         catch (Exception ex) {
@@ -58,7 +61,7 @@ public class UserController {
      * @param id The id of the user to delete
      * @return A string describing if the user is succesfully deleted or not.
      */
-    @RequestMapping("/delete")
+    @RequestMapping("/user/delete")
     @ResponseBody
     public String delete(long id) {
         try {
@@ -85,7 +88,7 @@ public class UserController {
         try {
             User user = userDao.findByEmail(email);
             userId = String.valueOf(user.getId());
-            userName = String.valueOf(user.getFirstName());
+            userName = String.valueOf(user.getFirst_name());
         }
         catch (Exception ex) {
             return "User not found";
@@ -101,7 +104,7 @@ public class UserController {
         try {
             User user = userDao.findById(id);
             userEmail = String.valueOf(user.getEmail());
-            userName = String.valueOf(user.getFirstName());
+            userName = String.valueOf(user.getFirst_name());
         }
         catch (Exception ex) {
             return "User not found";
@@ -117,17 +120,18 @@ public class UserController {
      * @param first_name The new name.
      * @return A string describing if the user is succesfully updated or not.
      */
-    @RequestMapping("/update")
+    @RequestMapping("/user/update")
     @ResponseBody
-    public String updateUser(long id, String email, String first_name, String userAddress, String userGender, Double userHeight, Double userWeight) {
+    public String updateUser(long id, String email, String third_party, String first_name, String last_name,  String userGender, Double userHeight, Double userWeight) {
         try {
             User user = userDao.findOne(id);
             user.setEmail(email);
-            user.setName(first_name);
-            user.setUserAddress(userAddress);
-            user.setUserGender(userGender);
-            user.setUserHeight(userHeight);
+            user.setThirdPartyChoice(third_party);
+            user.setFirst_name(first_name);
+            user.setLast_name(last_name);
             user.setUserWeight(userWeight);
+            user.setUserHeight(userHeight);
+            user.setUserGender(userGender);
             userDao.save(user);
         }
         catch (Exception ex) {
@@ -136,6 +140,24 @@ public class UserController {
         return "User succesfully updated!";
     }
 
+
+    //** Update ---> update the third party app for the user
+    //having the passed id.User
+    //
+
+    @RequestMapping("/user/updatethirdparty")
+    @ResponseBody
+    public String updateUser(long id, String third_party) {
+        try {
+            User user = userDao.findOne(id);
+            user.setThirdPartyChoice(third_party);
+            userDao.save(user);
+        }
+        catch (Exception ex) {
+            return "Error updating the third party application: " + ex.toString();
+        }
+        return "Third Party Application succesfully updated!";
+    }
     // ------------------------
     // PRIVATE FIELDS
     // ------------------------
