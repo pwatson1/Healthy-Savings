@@ -1,29 +1,57 @@
 package com.healthlysavings.api.domain;
 
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import java.util.Date;
+import javax.validation.constraints.NotNull;
 
 /**
  * Created by Doc on 3/14/16.
  */
+
+@Entity
 public class Finance{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-    private Date date;
+
+    @NotNull
+    private java.sql.Date date;
+
+    @NotNull
     private long userId;
+
+    @NotNull
     private double balance;
+
+    @NotNull
     private double dailyAccrual;
+
+    @NotNull
     private double bonusAPY;
+
+    @NotNull
     private double bonusAccrual;
 
-    public Date getDate() {
+    public Finance(){
+
+    }
+
+    public Finance(java.sql.Date date, long userId, double balance, double dailyAccrual, double bonusAPY, double bonusAccrual){
+        setUserId(userId);
+        setBalance(balance);
+        setDailyAccrual(dailyAccrual);
+        setBonusAPY(bonusAPY);
+        setBonusAccrual(bonusAccrual);
+        setDate(date);
+    }
+
+    public java.sql.Date getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(java.sql.Date date) {
         this.date = date;
     }
 
