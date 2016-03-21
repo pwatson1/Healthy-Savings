@@ -12,14 +12,10 @@ import java.util.Date;
 /**
  * Created by Doc on 3/15/16.
  */
-public interface FinanceDAO extends CrudRepository<Finance, Long> {
+public interface FinanceRepository extends CrudRepository<Finance, Long> {
 
-    ArrayList<Finance> findByUserId(long userID);
+    ArrayList<Finance> findByUserId(String userID);
 
-    Finance findByUserIdAndDate(long userID, java.sql.Date date);
-
-
-
-
+    Finance findByUserIdAndDate(String userID, java.sql.Date date);
 
 }

@@ -1,20 +1,20 @@
 package com.healthlysavings.api.domain;
 
-import javax.persistence.Id;
+
 
 /**
  * Created by jrdavis on 3/14/16.
  */
 public class CapitalOneCustomer {
 
-    @Id
+
     private String _id;
     private String last_name;
     private String first_name;
     private Address address;
 
     public CapitalOneCustomer(String id, String last_name, String first_name, Address address) {
-        _id = id;
+        this._id = id;
         this.last_name = last_name;
         this.first_name = first_name;
         this.address = address;
@@ -24,9 +24,7 @@ public class CapitalOneCustomer {
         return _id;
     }
 
-    public void set_id(String _id) {
-        this._id = _id;
-    }
+    public void set_id(String _id) { this._id = _id; }
 
     public String getLast_name() {
         return last_name;
