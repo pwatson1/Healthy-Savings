@@ -1,9 +1,6 @@
 package com.healthlysavings.api.domain;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -20,7 +17,8 @@ public class Finance{
     private java.sql.Date date;
 
     @NotNull
-    private long userId;
+    @Column(unique = true)
+    private String userId;
 
     @NotNull
     private double balance;
@@ -38,13 +36,10 @@ public class Finance{
 
     }
 
-    public Finance(java.sql.Date date, long userId, double balance, double dailyAccrual, double bonusAPY, double bonusAccrual){
+    public Finance(java.sql.Date date, String userId, int score){
         setUserId(userId);
-        setBalance(balance);
-        setDailyAccrual(dailyAccrual);
-        setBonusAPY(bonusAPY);
-        setBonusAccrual(bonusAccrual);
         setDate(date);
+        setFinances(score);
     }
 
     public java.sql.Date getDate() {
@@ -55,11 +50,11 @@ public class Finance{
         this.date = date;
     }
 
-    public long getUserId() {
+    public String getUserId() {
         return userId;
     }
 
-    public void setUserId(long userId) {
+    public void setUserId(String userId) {
         this.userId = userId;
     }
 
@@ -94,4 +89,13 @@ public class Finance{
     public void setBonusAccrual(double bonusAccrual) {
         this.bonusAccrual = bonusAccrual;
     }
+
+    public void setFinances(int score){
+
+        /**
+         * Set the balance as the previous day's balance. For now the first Finance Object for each User will be created on new User creation.
+         * In the future,
+         * **/
+    }
+
 }

@@ -24,7 +24,7 @@ public class FinanceController {
     }
 
 
-
+/**
     @RequestMapping(value = "/finance/{user_id}/", method = RequestMethod.POST)
     public Finance createFinancePost(@RequestBody Finance finance, @PathVariable(value="user_id") long id){
         finance.setUserId(id);
@@ -35,7 +35,19 @@ public class FinanceController {
         }
         return null;
     }
+**/
 
 
+    @RequestMapping(value = "/finance/create-finance")
+    public Finance createFinancePost(java.sql.Date date, String userId, int score ){
+
+        try{
+            Finance newFinance = new Finance(date,userId,score);
+            financeDAO.save(newFinance);
+        }catch (Exception e){
+
+        }
+        return null;
+}
 
 }

@@ -60,7 +60,10 @@ public class Scheduler {
     private void setUserChoices(){
 
         /* TODO FINISH QUERYING ALL USERS FOR THEIR CURRENT CHOICE */
-        userChoices.put("USERID","GoogleFit");
+        for(User user: userRepository.findAll()){
+            userChoices.put(user.getId(),user.getThirdPartyChoice());
+        }
+
 
     }
 

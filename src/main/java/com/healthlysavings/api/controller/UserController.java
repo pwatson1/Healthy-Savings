@@ -34,13 +34,7 @@ public class UserController {
     // PUBLIC METHODS
     // ------------------------
 
-    /**
-     * /create  --> Create a new user and save it in the database.
-     *
-     * @param email User's email
-     * @param Firstname User's first name
-     * @return A string describing if the user is succesfully created or not.
-     */
+
     @RequestMapping(value ="/user/create", method = RequestMethod.POST)
     @ResponseBody
     public String create(@RequestBody CapitalOneCustomer capitalOneCustomer, String email, Double userHeight, Double userWeight, String ThirdPartyChoice, String userGender) {
@@ -55,18 +49,12 @@ public class UserController {
         return "User succesfully created! (id = " + user.getId() + ")";
     }
 
-    /**
-     * /delete  --> Delete the user having the passed id.
-     *
-     * @param id The id of the user to delete
-     * @return A string describing if the user is succesfully deleted or not.
-     */
     @RequestMapping("/user/delete")
     @ResponseBody
-    public String delete(long id) {
+    public String delete(String id) {
         try {
-            User user = new User(id);
-            userDao.delete(user);
+
+            userDao.delete(userDao.findById(id));
         }
         catch (Exception ex) {
             return "Error deleting the user:" + ex.toString();
@@ -74,12 +62,6 @@ public class UserController {
         return "User succesfully deleted!";
     }
 
-    /**
-     * /get-by-email  --> Return the id for the user having the passed email.
-     *
-     * @param email The email to search in the database.
-     * @return The user id or a message error if the user is not found.
-     */
     @RequestMapping("/get-by-email")
     @ResponseBody
     public String getByEmail(String email) {
@@ -95,9 +77,10 @@ public class UserController {
         }
         return "The user id is: " + userId + "user name: " + userName;
     }
+
     @RequestMapping("/get-by-id")
     @ResponseBody
-    public String getByID(Long id) {
+    public String getByID(String id) {
 
         String userEmail;
         String userName;
@@ -111,18 +94,10 @@ public class UserController {
         }
         return "The user email is: " + userEmail+ "user name: " + userName;
     }
-    /**
-     * /update  --> Update the email and the name for the user in the database
-     * having the passed id.
-     *
-     * @param id The id for the user to update.
-     * @param email The new email.
-     * @param first_name The new name.
-     * @return A string describing if the user is succesfully updated or not.
-     */
+
     @RequestMapping("/user/update")
     @ResponseBody
-    public String updateUser(long id, String email, String third_party, String first_name, String last_name,  String userGender, Double userHeight, Double userWeight) {
+    public String updateUser(String id, String email, String third_party, String first_name, String last_name,  String userGender, Double userHeight, Double userWeight) {
         try {
             User user = userDao.findOne(id);
             user.setEmail(email);
@@ -147,7 +122,7 @@ public class UserController {
 
     @RequestMapping("/user/updatethirdparty")
     @ResponseBody
-    public String updateUser(long id, String third_party) {
+    public String updateUser(String id, String third_party) {
         try {
             User user = userDao.findOne(id);
             user.setThirdPartyChoice(third_party);
@@ -158,10 +133,5 @@ public class UserController {
         }
         return "Third Party Application succesfully updated!";
     }
-    // ------------------------
-    // PRIVATE FIELDS
-    // ------------------------
-
-
 
 }
