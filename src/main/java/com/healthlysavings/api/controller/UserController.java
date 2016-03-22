@@ -65,13 +65,24 @@ public class UserController {
     * */
 
 
-    @RequestMapping(value ="/user/create", method = RequestMethod.POST)
+    @RequestMapping(value ="/user/create")
     @ResponseBody
-    public String create(@RequestBody CapitalOneCustomer capitalOneCustomer, String email, Double userHeight, Double userWeight, String ThirdPartyChoice, String userGender, double balance) {
+    public String create(String lastName, String firstName, String city,
+                         String streetName, String zip,
+                         String state, String streetNumber,
+                         String email, Double userHeight,
+                         Double userWeight, String ThirdPartyChoice,
+                         String userGender, double balance)
+    {
+
         User user;
         Finance finance;
 
         try {
+       /*** TODO THIS IS WHERE CAPONE USER CREATION WOULD GO.  DO THIS BEFORE CREATING A NEW USER OBJECT LOCALLY ***/
+            CapitalOneCustomer capitalOneCustomer = new CapitalOneCustomer();
+        /* TODO FILL THIS IN */
+
             user = new User(capitalOneCustomer, email, userHeight, userWeight, ThirdPartyChoice, userGender);
             userRepository.save(user);
             finance = FinanceDAO.firstFinanceRecordForNewUser(user.getId(),balance);

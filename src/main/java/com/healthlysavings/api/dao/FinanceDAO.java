@@ -78,22 +78,33 @@ public class FinanceDAO {
 
     private static void makeBonus(){
         calculateScoreFactor();
-        bonusAPY = scoreFactor * score * maxBonusAPY;
+
+        /***  THIS IS THE CALCULATION FOR THE DAILY BONUS APY.  THE FIRST FACTOR IS THE SCORE FACTOR. ASSUMING AN AVERAGE
+         *  BMI OF 20, THIS FACTOR WILL BE 1.  IF THE PERSON IS OBESE AT A BMI OF 30, THIS FACTOR WILL BE 0.6.
+         *  THIS IS THE LIMITING FACTOR OF THE maxBonusAPY.
+         *
+         *  THE SECOND FACTOR IS FROM THEIR DAILY EXERCISE SCORE.  IF THEIR DAILY SCORE IS THE MAX 100, THIS FACTOR WILL BE 1.
+         *  IF THEIR DAILY EXERCISE IS A SCORE OF 65, THIS FACTOR WILL BE 0.65.
+         *
+         *  EXAMPLE:  PERSON WITH BMI 25 (slightly overweight) WHO EXERCISED TO %70 OF REQUIRED DAILY EXERCISE:
+         *
+         *  ((20/25) * 0.6 * (70/100)) = 0.8 * 0.6 * 0.7 = 0.34  OUT OF A MAX 0.6
+         *
+         * ***/
+        bonusAPY = ((20/scoreFactor) * maxBonusAPY) * (score/100);
 
         bonusAccrual = (bonusAPY/365) * balance;
     }
 
     private static void calculateScoreFactor(){
-        scoreFactor = (userRepository.findById(userId).getUserWeight() / userRepository.findById(userId).getUserHeight());
+        scoreFactor = (userRepository.findById(userId).getUserWeight() /
+                (userRepository.findById(userId).getUserHeight()*userRepository.findById(userId).getUserHeight())) * 703;
 
-        /** This is an example of a way to calculate a score factor. In this case, the user's weight is divided by their height.
-         *  Taller people will have lower factor, heavier people will have a higher factor.
+        /** THIS IS THE BMI FORMULA
          *
-         *  THIS MEANS NOTHING. DON'T WORRY ABOUT THIS. THIS SHOULD AVERAGE OUT TO ABOUT 0.3 WITH
-         *  PEOPLE WEIGHING THREE TIMES MORE THAN THEIR HEIGHT.
+         *  AVERAGE WILL BE ABOUT 20.  OBESE PEOPLE ARE ABOUT 30.  THIS MEANS THE HIGHER THE SCORE FACTOR...
+         *  THE LOWER THE BONUS APY SHOULD BE.
          *
-         *  AGAIN THIS MEANS NOTHING; THIS COULD JUST AS EASILY BE SET TO A STATIC NUMBER OR EXPANDED TO COMPLEX
-         *  CALCULATIONS BASED ON THE USERS CHARACTERISTICS.
          */
     }
 

@@ -21,7 +21,6 @@ public class Finance{
     private java.sql.Date date;
 
     @NotNull
-    @Column(unique = true)
     private String userId;
 
     @NotNull
