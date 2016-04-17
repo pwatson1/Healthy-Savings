@@ -25,7 +25,7 @@
         <module name="HealthySavingsAPI" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel target="1.8">
+    <bytecodeTargetLevel>
       <module name="HealthySavingsAPI" target="1.8" />
     </bytecodeTargetLevel>
   </component>
